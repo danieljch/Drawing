@@ -28,6 +28,16 @@ struct ContentView: View {
 }
 
 struct Triangle: Shape {
+   static func path2(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+
+        return path
+    }
     func path(in rect: CGRect) -> Path {
         var path = Path()
 
@@ -78,7 +88,7 @@ struct Flower: Shape {
             let position = rotation.concatenating(CGAffineTransform(translationX: rect.width / 2, y: rect.height / 2))
 
             // create a path for this petal using our properties plus a fixed Y and height
-            let originalPetal = Path(ellipseIn: CGRect(x: petalOffset, y: 0, width: petalWidth, height: rect.width / 2))
+            let originalPetal = Triangle.path2(in:CGRect(x: petalOffset, y: 0, width: petalWidth, height: rect.width / 2))//Path(ellipseIn: CGRect(x: petalOffset, y: 0, width: petalWidth, height: rect.width / 2))
 
             // apply our rotation/position transformation to the petal
             let rotatedPetal = originalPetal.applying(position)
