@@ -8,23 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var colorCycle = 0.0
-    @State private var insetAmount = 50.0
+    @State private var rows = 4
+    @State private var columns = 4
+
     var body: some View {
-           Trapezoid(insetAmount: insetAmount)
-               .frame(width: 200, height: 100)
-               .onTapGesture {
-                   withAnimation {
-                       insetAmount = Double.random(in: 10...90)
-                   }
-               }
-       }
+        Checkerboard(rows: rows, columns: columns)
+            .onTapGesture {
+                withAnimation(.linear(duration: 3)) {
+                    rows = 8
+                    columns = 16
+                }
+            }
+    }
 }
 
 struct Checkerboard: Shape {
     var rows: Int
     var columns: Int
+    var animatableData: AnimatablePair<Double, Double> {
+        get {
+           AnimatablePair(Double(rows), Double(columns))
+        }
 
+        set {
+            rows = Int(newValue.first)
+            columns = Int(newValue.second)
+        }
+    }
     func path(in rect: CGRect) -> Path {
         var path = Path()
 
